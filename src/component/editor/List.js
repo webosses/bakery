@@ -5,25 +5,19 @@ function List({products}){
 
     
    
-   let category="";
+//    let category="";
     return <>
     <table>
         <thead>
             <tr>
-            <th>No.</th>
             <th>name</th>
-            <th>category</th>
-            <th>instock</th>
             <th>required</th>
-            <th>wrapup</th>
             </tr>
         </thead>
         <tbody>
      {
         products.length===0?"no products availabel":
         products.map(item=>{
-
-            let printHeader = false;
 
             // if(category===""||item.category!==category){
             //     category = item.category;
@@ -35,7 +29,7 @@ function List({products}){
 
             return (
                
-            <Item key={item.id} item={item} printHeader={printHeader}/>)
+            <Item key={item.id} item={item} printHeader={false}/>)
          })//end map
      }
 

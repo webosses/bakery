@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import * as contentful from "contentful"
 import * as contentfulManager from "contentful-management"
-import today,{tomorrow,yesterday} from "./util"
+import today,{tomorrow,yesterday,dayBefore} from "./util"
 
 const AppContext = React.createContext()
 
@@ -31,6 +31,11 @@ const categories = [
 
 ]
 
+
+const initFilter = ()=>{
+  return {category:[],isdone:-1,instock:-1,iswrap:-1,name:""}
+}
+
 const AppProvider = ({ children }) => {
 
   const [env,setEnv] = useState();
@@ -39,70 +44,49 @@ const AppProvider = ({ children }) => {
   const [dailyProducts,setDailyProducts]=useState([])
   const [sortedProducts, setSortedProducts] = useState([])
 
-  const [viewor, setViewor]=useState('editor')//printer, editor, baker
+  const [viewor, setViewor]=useState('editor')//printor, editor, baker
   const [selectedDay, setSelectedDay] = useState(today)
   const [sortKey, setSortKey] = useState('index')
-  const [filterKeys, setFilterKeys] = useState({category:[],isdone:-1,instock:-1})
+  const [filterKeys, setFilterKeys] = useState(initFilter())
   const [hasTomorrowData,setHasTomorrowData] = useState(false)
+  const [bakerProducts,setBakerProducts] = useState([])
 
+
+// const handleBakerProducts=(id,value)=>{
+//   let temp;
+//   if(value>0){
+//     temp = [...bakerProducts,dailyProducts.find(p=>p.id===id)]
+
+//     }else{
+//        temp = bakerProducts.filter(p=>p.id!==id)
+//     }
+//     setBakerProducts(temp)
+  
+// }
   const getDailyProduct = (day)=>{
-    return  products.filter(product=>new Date(product.date).toLocaleDateString()==day)
-  }
-// console.log('tomorrow',new Date(tomorrow))
-  const copyProducts = ()=>{
-    console.log(products)
-    let tomorrowData = [];//to merge into products list using setProducts
-    const todaysData = getDailyProduct(today);
+    const len=products.length;
+   // console.log(products)
+     if(len==0)return [];
 
-    //for detect if all today's data copied to contentful
-    const todaysDataLength = todaysData.length;
-    const created = 0;
 
-    todaysData.forEach(pro=>{
-      let fields = {}
-      let tomorrowDataItem = {}
-      for(let [key,value] of Object.entries(pro)){
-        //reset data
-       
-        if(key=='id')continue
-        if(key=='date')value = new Date(tomorrow) ;
-        if(key=='isDone')value=false ;
-        if(key=='prepared')value = 0 ;
-       
-        tomorrowDataItem = {...tomorrowDataItem,[key]:value}
-        fields = {...fields,[key]:{"en-US": value}}
-        
+     return  products.filter(product=>{
+       const pdate = new Date(product.date).toLocaleDateString()
+       const cdate = new Date(day).toLocaleDateString()
+       console.log(pdate,cdate,"pdate,cdate")
+       //console.log(day,product.date)
+       return pdate===cdate;
       }
-      tomorrowData =[...tomorrowData,tomorrowDataItem]
-
-      // console.log('fields',fields)
-        setTimeout(()=>{
-          env.createEntry('bakeryProduct',{fields: fields})
-      .then(product=>{
-        created +=1;
-       return product.publish()
-      }) 
-      .then(product=>console.log(product))
-      .catch(console.error)
-
-        },1000)
-
-        if(created==todaysDataLength){
-          setProducts(products=>{
-            return [...products,...tomorrowData]
-          })
-         // setCopyCompleted(true)
-        }
-      
-      //env createEntry
-    })
-   // console.log(todaysData);
+       )
+        
 
   }
 
   
-
-
+const getBakerProducts = ()=>{
+  console.log(sortKey,'sortkey')
+  return dailyProducts.filter(p=>p.required>0);
+ //return sortProducts(getDailyProduct(selectedDay).filter(p=>p.required>0))
+}
   //const [ isLoading, error,]
  const [isLoading,setIsLoading]=useState(true);
  const [error,setError]=useState({ show: false, msg: '' });
@@ -146,10 +130,37 @@ const AppProvider = ({ children }) => {
 
 
 const filterProducts = ()=>{
+  const origin = viewor==="editor"?dailyProducts:getBakerProducts()
 	
-		const {category,isdone,instock} = filterKeys;
-		let tempProducts = [...dailyProducts];
-   // console.log('before filter',tempProducts)
+		const {category,isdone,instock,iswrap,name} = filterKeys;
+
+		let tempProducts = [...origin];
+   console.log('before filter',tempProducts)
+  // const ptn = new RegExp('cookie')
+
+   if(name.length>0){
+     console.log(`.*${name}.*`,'pattern')
+       const pattern = new RegExp(`.*${name}.*`,'i')
+       console.log('name',name)
+       console.log(tempProducts,'before name filter')
+
+    tempProducts = tempProducts.filter(product => {
+      console.log(pattern.test(product.title),'test',product.title)
+const test =   pattern.test(product.title)
+console.log(test)
+if(test===true){
+  console.log(product,'product true')
+}
+return test
+     // category.includes(product.category)
+    }
+  
+    );
+
+    console.log('after filter name',tempProducts);
+
+    
+  }
 
 		if(category.length!==0){
        
@@ -172,21 +183,33 @@ const filterProducts = ()=>{
 
 
     if(isdone != -1){
-     // console.log('isdone',isdone)
+      console.log('isdone',isdone)
       tempProducts = tempProducts.filter(product => {
        // console.log('pisdone',product.isDone,isdone)
-        return product.isDone ==isdone
+        return product.isDone == isdone
 
       } );
     }
 
-    if(instock !==-1){
-      tempProducts = tempProducts.filter(product => product.instock == instock);
+    if(iswrap != -1){
+      console.log('iswrap',iswrap)
+      // console.log(tempProducts)
+      tempProducts = tempProducts.filter(product => {
+        const check = product.iswrap==iswrap
+        // console.log(check)
+        // console.log('piswrap',iswrap,product.iswrap,check)
+        return check
+
+      } );
     }
 
-    //console.log('temppro',tempProducts)
+    if(instock !=-1){
+      tempProducts = tempProducts.filter(product => product.instock ==instock);
+    }
+
+    console.log('temppro',tempProducts)
 	
-		return setSortedProducts(()=>tempProducts);
+		return  tempProducts
 	
 
 }
@@ -236,8 +259,8 @@ const filterProducts = ()=>{
     return products;
   }
 
-  const sortProducts=(products)=>{
-     let tempPro = [...products];//[...sortedProducts];
+  const sortProducts=()=>{
+     let tempPro = viewor==="editor"?[...dailyProducts]:[...getBakerProducts()];//[...sortedProducts];
      if(tempPro.length==0)return [];
 
     switch(sortKey){
@@ -327,9 +350,9 @@ useEffect(async ()=>{
 //fetch products from contentful
 useEffect(()=>{
    client.getEntries({
-     limit:100,
+     limit:200,
      content_type:'bakeryProduct',
-     order:'fields.index'
+     order:'fields.date'
   })
 .then(response=>{
      
@@ -347,26 +370,65 @@ useEffect(()=>{
 
 //filter out daily data
 useEffect(()=>{
+  console.log(selectedDay,"day changed")
+    setFilterKeys(()=>initFilter())
+    setDailyProducts(()=>{
+      return getDailyProduct(selectedDay)
+    })
+  
+  
+},[selectedDay])//products
+
+useEffect(()=>{
+   
     setHasTomorrowData(getDailyProduct(tomorrow).length>0)
     setDailyProducts(()=>{
       return getDailyProduct(selectedDay)
     })
   
   
-},[selectedDay,products])
+},[products])//products
+
+
+
+
+useEffect(() => {
+
+  if(viewor==="baker"){
+    setSortKey('category')
+   } else{
+    setSortKey('index')
+   }
+  
+}, [viewor])
 
 //sort product data by sortkey
 useEffect(()=>{
-  setSortedProducts(sortProducts(dailyProducts))
 
-},[dailyProducts,sortKey])
+  setSortedProducts(()=>sortProducts())
+
+},[sortKey])//dailyP
+
+useEffect(()=>{
+    setSortedProducts(()=>filterProducts())
+    console.log(filterKeys)
+
+},[filterKeys,dailyProducts])
+
+// useEffect(()=>{
+
+//   if(viewor==='editor'){
+//     setSortedProducts(()=>dailyProducts)
+
+//   }else{
+//     setSortedProducts(getBakerProducts())
+//   }
+//  // console.log("baker products",getBakerProducts())
+//   // setBakerProducts(()=>getBakerProducts())
+// },[dailyProducts])
 
 //filter products by filterkeys
-useEffect(()=>{
-  // console.log(filterKeys)
-filterProducts()
 
-},[filterKeys])
 
 
 //***end useEffect */
@@ -415,6 +477,7 @@ filterProducts()
       tomorrow,
       yesterday,
       hasTomorrowData,
+      dailyProducts,
     isLoading,
     error,
     selectedDay, 
@@ -424,14 +487,21 @@ filterProducts()
      categories,
      sortKey,
      filterKeys, 
+     env,
+     bakerProducts,
+     sortProducts,
      setSortKey,
      setFilterKeys,
      handleFilter,
      filterProducts,
-     copyProducts,
      handleUpdate,
      setSelectedDay,
      setViewor,
+     getDailyProduct,
+     setProducts,
+     setBakerProducts,
+     initFilter,
+    //  handleBakerProducts,
      }}>
       {children}
     </AppContext.Provider>

@@ -1,31 +1,36 @@
-import React, { useState, useEffect ,useContext} from 'react'
+import React from 'react'
 import './App.css';
 
 
-import {AppContext,useGlobalContext} from './context';
+import {useGlobalContext} from './context';
 import Editor from './pages/Editor';
 import Printor from './pages/Printor';
 import Baker from './pages/Baker';
 import Views from './component/Viewors';
 import Header from './component/Header';
+import Loading from './component/Loading';
+import Error from './component/Error';
 
 
 
 function App() {
  
-  const {sortedProducts,viewor,setViewor} = useContext(AppContext);//useGlobalContext();
+  const {viewor,setViewor,error,isLoading,selectedDay,yesterday,today,tomorrow} = useGlobalContext();
  
-  console.log('app.js',sortedProducts);
+
+  if(isLoading) return <Loading/>
 
   return <>
-    <div className="App">
+    <div className={`App ${selectedDay==today?"today":selectedDay==tomorrow?"tomorrow":"yesterday"}`}>
       
     <Header/>
     
      <main>
-      {viewor=='editor'&&<Editor/>}
-      {viewor=='baker'&&<Baker/>}
-      {viewor=='Printor'&&<Printor/>}
+     {error&&<Error msg={error.msg}/>}
+
+      {viewor==='editor'&&<Editor/>}
+      {viewor==='baker'&&<Baker/>}
+      {viewor==='printor'&&<Printor/>}
       </main>
 
       <footer>

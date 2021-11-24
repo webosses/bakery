@@ -1,39 +1,46 @@
 import React from 'react';
 import Item from "./Item";
+import { useGlobalContext } from '../context';
+
 
 function List({products}){
 
-    
+
+    const {sortKey} = useGlobalContext();
+    let printHeader=false;
+    let category = ""
+    console.log(sortKey)
    
-   let category="";
+//    let category="";
     return <>
     <table>
-        <thead>
+        {/* <thead>
             <tr>
-            <th>name</th>
-            <th>instock</th>
-            <th>required</th>
-            <th>prepared</th>
+            <th className="tname" width="80">name</th>
+            <th className="treq"> {viewor==="editor"?"req":" "}</th>
+            <th className="tact"></th>
             </tr>
-        </thead>
+        </thead> */}
         <tbody>
      {
-        products.length===0?"no products availabel":
         products.map(item=>{
+            printHeader = false;
 
-            let printHeader = false;
+           
 
-            if(category===""||item.category!==category){
+            if(sortKey==="category"&&(category===""||item.category!==category)){
                 category = item.category;
                 printHeader = true;
                 
             }
+
+
             
             
 
             return (
                
-            <Item key={item.id} item={item} printHeader={printHeader} />)
+            <Item item={item} printHeader={printHeader} key={item.id} />)
          })//end map
      }
 

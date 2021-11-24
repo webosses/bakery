@@ -1,13 +1,11 @@
 import React,{useState} from 'react';
 import {useGlobalContext} from '../../context';
-import today from '../../util';
-import Calendar from 'react-calendar';
+// import Calendar from 'react-calendar';
 
 
 
 //actions {hasAction bool, markup func }
 export default function Item({item,printHeader}){
-  const isEqualDate = new Date(item.date).toLocaleDateString()==today;
   const {categories,handleUpdate} =  useGlobalContext();
   const [instock,setInstock] = useState(item.instock)
   const [iswrap,setIswrap] = useState(item.iswrap)
@@ -15,25 +13,17 @@ export default function Item({item,printHeader}){
   
   // const [hasDate,setHasDate] = useState(isEqualDate)
   
-console.log('item',new Date(item.date).toLocaleDateString(),today);
 
   
     return<>
      {printHeader&&<tr className="item_category_title"><th colSpan="5">{item.category}</th></tr>}
       <tr className="item">
-        <td>{item.index}
-        {/* <button  className={`btn_switch ${hasDate?'on':'off'}`}
-        onClick={()=>{
-          setHasDate(!hasDate)
-           handleUpdate(item.id,'date',new Date())
-        }}><span></span></button> */}
-        </td>
           <td className="item_name">{item.title} </td>
           <td>
             <select onChange={(e)=>handleUpdate(item.id,'category',e.target.value)}>
               <option>select a category</option>
               {categories.map(c=>{
-                return <option value={c} selected={c==item.category?'selected':''}>{c}</option>
+                return <option value={c} selected={c===item.category?'selected':''}>{c}</option>
               })}
             </select></td>
           <td className="item_stock">
