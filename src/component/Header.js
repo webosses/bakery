@@ -10,7 +10,7 @@ function Header({children}) {
    const [showFilters,setShowFilters] = useState(false) 
    return (
         <div className="header">
-                        <div className="brand">Exp Bakery</div>
+                        <div className="brand">ExpT Bakery</div>
 
             <div className="btn_dates nav">
                 <button  className={`btn_yesterday ${selectedDay===yesterday? ' on':''}`} onClick={()=>{
