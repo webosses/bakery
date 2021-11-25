@@ -72,7 +72,7 @@ const AppProvider = ({ children }) => {
      return  products.filter(product=>{
        const pdate = new Date(product.date).toLocaleDateString()
        const cdate = new Date(day).toLocaleDateString()
-       console.log(pdate,cdate,"pdate,cdate")
+       //console.log(pdate,cdate,"pdate,cdate")
        //console.log(day,product.date)
        return pdate===cdate;
       }
@@ -380,12 +380,11 @@ useEffect(()=>{
 },[selectedDay])//products
 
 useEffect(()=>{
-   
+   console.log(sortKey,'product updating')
     setHasTomorrowData(getDailyProduct(tomorrow).length>0)
     setDailyProducts(()=>{
-      return getDailyProduct(selectedDay)
+      return getDailyProduct(selectedDay);
     })
-  
   
 },[products])//products
 
@@ -413,7 +412,13 @@ useEffect(()=>{
     setSortedProducts(()=>filterProducts())
     console.log(filterKeys)
 
-},[filterKeys,dailyProducts])
+},[filterKeys])
+
+useEffect(()=>{
+   setSortedProducts(()=>{
+    return sortProducts();
+   })
+},[dailyProducts])
 
 // useEffect(()=>{
 
