@@ -6,11 +6,12 @@ import { useGlobalContext } from '../context';
 
 
 function Header({children}) {
-   const {today,tomorrow,yesterday,selectedDay,setSelectedDay,viewor,sortKey,setSortKey,filterKeys,handleFilter,categories} =useGlobalContext();
+   const {today,tomorrow,yesterday,selectedDay,setSelectedDay,viewor,sortKey,setSortKey,authenticated,logout} =useGlobalContext();
    const [showFilters,setShowFilters] = useState(false) 
    return (
         <div className="header">
                         <div className="brand">ExpT Bakery</div>
+                        <span className="btn_logout" onClick={logout}>logout</span>
 
             <div className="btn_dates nav">
                 <button  className={`btn_yesterday ${selectedDay===yesterday? ' on':''}`} onClick={()=>{
@@ -41,12 +42,9 @@ function Header({children}) {
              <SortForm setSortKey={setSortKey} sortKey={sortKey}/>
 
 <Filter  
-filterKeys={filterKeys}
-handleFilter={handleFilter} 
-categories = {categories}
-viewor ={viewor}
+
 showFilters={showFilters}
-filterKeys = {filterKeys}
+
 /></div>
 }
          

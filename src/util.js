@@ -5,7 +5,7 @@ let yesterday = new Date(today.getFullYear(),today.getMonth(),today.getDate()-1)
 console.log("yesterday from before localstrin",new Date(yesterday))
 const dayBefore=(date)=>{
    
-   console.log('date',date.getMonth())
+   // console.log('date',date.getMonth())
    return new Date(date.getFullYear(),date.getMonth(),date.getDate()-1)
   
 }
@@ -13,7 +13,7 @@ const dayBefore=(date)=>{
 //yesterday = yesterday.toLocaleDateString();
 //today = today.toLocaleDateString();
 
-console.log("yesterday from after localstrin",new Date(yesterday))
+// console.log("yesterday from after localstrin",new Date(yesterday))
 
 export default today
 export {tomorrow,yesterday,dayBefore}

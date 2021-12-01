@@ -1,6 +1,9 @@
 import React,{useState,useEffect} from "react";
+import { useGlobalContext } from '../context';
 
-export default function Filter({handleFilter,categories,viewor,showFilters,filterKeys}){
+
+export default function Filter({showFilters}){
+    const {viewor,handleFilter,filterKeys,categories,initFilter,setFilterKeys} =useGlobalContext();
 
     const [selectedCa,setSelectedCa]=useState(filterKeys.category)
     console.log(filterKeys,"filter comp")
@@ -61,6 +64,14 @@ export default function Filter({handleFilter,categories,viewor,showFilters,filte
     </div>
 
     <div className={`filters ${showFilters?"show":""}`}>
+
+         
+
+{showFilters&&filterKeys!==initFilter()&&<div><span className="btn btn_clear" onClick={()=>{
+    setFilterKeys(initFilter())
+    setSelectedCa([]);
+    }}>clear</span></div>}
+
        <div className="wrap_filter_items">
      <div className="filter_row">
     <label><span>all</span><input type="checkbox" value='all' name="category" checked={isChecked('all')}  onChange={(e)=>{
@@ -84,10 +95,7 @@ export default function Filter({handleFilter,categories,viewor,showFilters,filte
    
    </div>
 
-   
-
-
-   
+     
 <div className="filter_row">
     <label>
         <span>In stock</span>

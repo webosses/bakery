@@ -38,7 +38,7 @@
 } */
 :root{
 
-  --activeCl: green;
+  --activeCl: #F7DD72;
   --recedCl: #aaa;
   --blueCl:#5AB1BB;
   --greenCl:#A5C882;
@@ -60,7 +60,105 @@
   width:100%;
   box-sizing: border-box;
 }
+.login{
 
+ 
+  height: 100vh;
+  background:var(--brandCl);
+ 
+}
+.btn_logout{
+  position: absolute;
+  top:1rem;
+  right:1rem;
+  display: inline-block;
+  border:1px solid var(--lightGray);
+  color:var(--lightGray);
+  padding: 0.2rem 0.3rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+}
+.btn_logout:hover{
+  border-color: var(--lightGreen);
+  color:var(--lightGreen);
+
+}
+.login_form{
+  display: flex;
+  margin:0% auto;
+  flex-wrap:wrap;
+  max-width:500px;
+  padding:1rem 2rem;
+  color:var(--lightGreen);
+}
+.login_form > *{
+  flex:1 1 100%;
+}
+
+.login_form > * + *{
+  margin-top:1rem;
+}
+.login_form h2{
+  /* text-transform: uppercase; */
+
+}
+.login_form .input{
+  display: flex;
+}
+.login_header{
+  text-align: center;
+
+ border-bottom:2px solid var(--lightGreen);
+ margin-bottom:3rem;
+}
+
+.login_form .input input{
+  padding:0.2rem 0.5rem;
+  background:rgba(255,255,255,0.5);
+  
+}
+
+.login_form .input input:focus{
+  /* border:none; */
+  outline: 2px solid var(--lightGreen);
+  border-color: var(--lightGreen);
+  box-shadow: transparent;
+}
+.login_form label{
+  flex: 0 0 30%;
+  text-transform: capitalize;
+
+
+}
+
+.login_btn{
+  margin-top:3rem;
+}
+.login_btn button{
+ display: block;
+ width:100%;
+ border:none;
+ background:transparent;
+ border:1px solid transparent;
+ /* text-transform: uppercase; */
+ font-weight: bold;
+ background:var(--activeCl);
+ color:black;
+ border-radius: 1rem;
+
+ background:transparent;
+ border-color:var(--lightGreen);
+ color:var(--lightGreen);
+
+}
+.login_btn button:hover{
+  background:transparent;
+ border-color:var(--lightGreen);
+ color:var(--lightGreen);
+
+ 
+}
 .header{
   position: relative;
   /* width:100%; */
@@ -97,7 +195,7 @@ footer{
   border-left:1px solid #fff;
 }
 
-button{
+button,.btn{
   display: inline-block;
   border:none;
   background:var(--recedCl);
@@ -225,6 +323,11 @@ button{
   border-color:#eaeaea;
   margin-right: 0.5rem;
 }
+.input_edited{
+  background:var(--activeCl)!important;
+  outline:2px solid var(--activeCl);
+
+}
 td, th{
   /* border:1px solid #050505; */
   border:none;
@@ -297,6 +400,11 @@ table{
 .btnClose::after{
   transform:rotate(-45deg);
 }
+.action{
+  min-width: 20%;
+  padding-right:2rem;
+   
+}
 
 .action_btns{
   display: flex;
@@ -322,14 +430,14 @@ table{
   pointer-events: none;
   z-index: 2;
 }
-.action_btns label{
+/* .action_btns label{
   display: block;
   position: absolute;
   z-index: 2;
   font-size: 0.8rem;
   top:1.5rem;
   pointer-events: none;
-}
+} */
 .action_btns.show{
   height: 100%;
 }
@@ -422,6 +530,19 @@ table{
   }
   .btn_filter{
     position: relative;
+  }
+
+  .btn_clear{
+    position: absolute;
+    padding:0rem 0.2rem;
+    width:auto;
+    right:1rem;
+    bottom: 1rem;
+    border-radius: 10%;
+    background-color: transparent;
+    /* border:none; */
+    margin:0;
+
   }
 .search_box{
   

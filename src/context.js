@@ -50,6 +50,7 @@ const AppProvider = ({ children }) => {
   const [filterKeys, setFilterKeys] = useState(initFilter())
   const [hasTomorrowData,setHasTomorrowData] = useState(false)
   const [bakerProducts,setBakerProducts] = useState([])
+  const [authenticated,setAuthenticated] = useState(false)
 
 
 // const handleBakerProducts=(id,value)=>{
@@ -63,9 +64,54 @@ const AppProvider = ({ children }) => {
 //     setBakerProducts(temp)
   
 // }
+
+const authenticateUser = ()=>{
+
+}
+
+const logout = ()=>{
+  localStorage.removeItem("user")
+  setAuthenticated(false)
+}
+
+const login=(username,password)=>{
+  client.getEntries({
+    content_type: 'user',
+  'fields.username[match]': username,
+  'fields.password[match]': password,
+  include: 1,
+limit:1})
+  .then(entry=>{
+     if(entry.items.length>0){
+       const user=entry.items[0];
+      setLocalStorage("user",{name:user.fields.username,token:user.sys.id})
+      setAuthenticated(true)
+     }
+  })
+  .catch(console.error)
+}
+
+const hasAccessToken = ()=>{
+
+  const user =getLocalStorage('user'); 
+  if(!user)return false;
+  client.getEntry(user.token)
+  .then(()=>setAuthenticated(true))
+  .catch(console.error)
+
+}
+
+
+useEffect(()=>{
+  console.log(
+    'effect token'
+  )
+  hasAccessToken()
+},[])
+
   const getDailyProduct = (day)=>{
     const len=products.length;
-   // console.log(products)
+  //  console.log(products)
      if(len==0)return [];
 
 
@@ -135,7 +181,7 @@ const filterProducts = ()=>{
 		const {category,isdone,instock,iswrap,name} = filterKeys;
 
 		let tempProducts = [...origin];
-   console.log('before filter',tempProducts)
+ //  console.log('before filter',tempProducts)
   // const ptn = new RegExp('cookie')
 
    if(name.length>0){
@@ -145,19 +191,19 @@ const filterProducts = ()=>{
        console.log(tempProducts,'before name filter')
 
     tempProducts = tempProducts.filter(product => {
-      console.log(pattern.test(product.title),'test',product.title)
-const test =   pattern.test(product.title)
-console.log(test)
-if(test===true){
-  console.log(product,'product true')
-}
-return test
+    //  console.log(pattern.test(product.title),'test',product.title)
+return  pattern.test(product.title)
+//console.log(test)
+// if(test===true){
+//   console.log(product,'product true')
+// }
+
      // category.includes(product.category)
     }
   
     );
 
-    console.log('after filter name',tempProducts);
+    // console.log('after filter name',tempProducts);
 
     
   }
@@ -176,14 +222,14 @@ return test
       }
       );
 
-      console.log('after filter category',tempProducts);
+      // console.log('after filter category',tempProducts);
 
 			
 		}
 
 
     if(isdone != -1){
-      console.log('isdone',isdone)
+      // console.log('isdone',isdone)
       tempProducts = tempProducts.filter(product => {
        // console.log('pisdone',product.isDone,isdone)
         return product.isDone == isdone
@@ -192,7 +238,7 @@ return test
     }
 
     if(iswrap != -1){
-      console.log('iswrap',iswrap)
+      // console.log('iswrap',iswrap)
       // console.log(tempProducts)
       tempProducts = tempProducts.filter(product => {
         const check = product.iswrap==iswrap
@@ -207,7 +253,7 @@ return test
       tempProducts = tempProducts.filter(product => product.instock ==instock);
     }
 
-    console.log('temppro',tempProducts)
+    // console.log('temppro',tempProducts)
 	
 		return  tempProducts
 	
@@ -230,7 +276,7 @@ return test
      return 0;
      
     })
-    console.log('aftersort',products)
+    // console.log('aftersort',products)
     return products;
   }
 
@@ -259,8 +305,9 @@ return test
     return products;
   }
 
-  const sortProducts=()=>{
-     let tempPro = viewor==="editor"?[...dailyProducts]:[...getBakerProducts()];//[...sortedProducts];
+  const sortProducts=(products)=>{
+    let tempPro = [...products]
+    // let tempPro = viewor==="editor"?[...dailyProducts]:[...getBakerProducts()];//[...sortedProducts];
      if(tempPro.length==0)return [];
 
     switch(sortKey){
@@ -327,14 +374,22 @@ return test
   
 //   }, [products]);
 
+  const setLocalStorage=(name,data)=>{
+
+    localStorage.setItem(name,JSON.stringify(data))
+       
+  }
+
   const getLocalStorage = (name) => {
-    let list = localStorage.getItem(name);
-    if (list) {
+    let data = localStorage.getItem(name);
+    if (data) {
       return  JSON.parse(localStorage.getItem(name));
     } else {
       return [];
     }
   };
+
+  
 
 
 //useEffects ****************
@@ -352,7 +407,7 @@ useEffect(()=>{
    client.getEntries({
      limit:200,
      content_type:'bakeryProduct',
-     order:'fields.date'
+     order:'-fields.date,fields.index'
   })
 .then(response=>{
      
@@ -370,7 +425,7 @@ useEffect(()=>{
 
 //filter out daily data
 useEffect(()=>{
-  console.log(selectedDay,"day changed")
+ // console.log(selectedDay,"day changed")
     setFilterKeys(()=>initFilter())
     setDailyProducts(()=>{
       return getDailyProduct(selectedDay)
@@ -380,7 +435,7 @@ useEffect(()=>{
 },[selectedDay])//products
 
 useEffect(()=>{
-   console.log(sortKey,'product updating')
+  // console.log(sortKey,'product updating',products)
     setHasTomorrowData(getDailyProduct(tomorrow).length>0)
     setDailyProducts(()=>{
       return getDailyProduct(selectedDay);
@@ -403,20 +458,20 @@ useEffect(() => {
 
 //sort product data by sortkey
 useEffect(()=>{
-
-  setSortedProducts(()=>sortProducts())
+ 
+  setSortedProducts(()=>sortProducts(filterProducts()))
 
 },[sortKey])//dailyP
 
 useEffect(()=>{
-    setSortedProducts(()=>filterProducts())
+    setSortedProducts(()=>sortProducts(filterProducts()))
     console.log(filterKeys)
 
 },[filterKeys])
 
 useEffect(()=>{
    setSortedProducts(()=>{
-    return sortProducts();
+    return sortProducts(filterProducts());
    })
 },[dailyProducts])
 
@@ -494,6 +549,7 @@ useEffect(()=>{
      filterKeys, 
      env,
      bakerProducts,
+     authenticated,
      sortProducts,
      setSortKey,
      setFilterKeys,
@@ -506,6 +562,8 @@ useEffect(()=>{
      setProducts,
      setBakerProducts,
      initFilter,
+     login,
+     logout,
     //  handleBakerProducts,
      }}>
       {children}
