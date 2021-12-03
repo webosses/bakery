@@ -34,7 +34,7 @@ export default function Item({item,printHeader}){
 
 
 
-          {viewor==="editor"&&selectedDay===tomorrow&&<input className={`${edited?"input_edited":""}`} type="text" value={inputValue}
+          {viewor==="editor"&&selectedDay===tomorrow&&<input className={`${edited?"input_edited":""}`} type="number" value={inputValue}
                onFocus={(e)=>{
                  e.target.select()
 
@@ -42,7 +42,7 @@ export default function Item({item,printHeader}){
                onChange = {(e)=>{
                 let value = parseInt(e.target.value)
                 if(isNaN(value)){
-                    e.target.value=0; 
+                    e.target.value=inputValue; 
                     return;
                 }
                 if(inputValue!==value){

@@ -9,7 +9,7 @@ function List({products}){
     const {sortKey} = useGlobalContext();
     let printHeader=false;
     let category = ""
-    console.log(sortKey)
+    // console.log(sortKey)
    
 //    let category="";
     return <>

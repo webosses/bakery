@@ -87,7 +87,7 @@ function Editor() {
     .catch(console.error)
   
     }
-    console.log(filterKeys)
+    // console.log(filterKeys)
     // useEffect(()=>{
     //   setFilterKeys(initFilter())
     // },[])

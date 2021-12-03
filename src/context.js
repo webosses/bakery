@@ -66,7 +66,7 @@ const AppProvider = ({ children }) => {
 // }
 
 const authenticateUser = ()=>{
-
+   return 
 }
 
 const logout = ()=>{
@@ -211,11 +211,10 @@ return  pattern.test(product.title)
 		if(category.length!==0){
        
 			tempProducts = tempProducts.filter(product => {
-        console.log('filter category',category,product.category)
+        // console.log('filter category',category,product.category)
          for(var i=0; i<category.length; i++){
-                 if(category[i]===product.category){
-                   return true;
-                 }
+                 return category[i]===product.category
+                
          }
        return false;
        // category.includes(product.category)
@@ -465,7 +464,7 @@ useEffect(()=>{
 
 useEffect(()=>{
     setSortedProducts(()=>sortProducts(filterProducts()))
-    console.log(filterKeys)
+    // console.log(filterKeys)
 
 },[filterKeys])
 

@@ -6,7 +6,7 @@ export default function Filter({showFilters}){
     const {viewor,handleFilter,filterKeys,categories,initFilter,setFilterKeys} =useGlobalContext();
 
     const [selectedCa,setSelectedCa]=useState(filterKeys.category)
-    console.log(filterKeys,"filter comp")
+    // console.log(filterKeys,"filter comp")
 
     const handleCheckboxes = (event)=>{
         if(event.target.value=='all'){
@@ -98,14 +98,14 @@ export default function Filter({showFilters}){
      
 <div className="filter_row">
     <label>
-        <span>In stock</span>
+        <span>stock</span>
         <select onChange={(e)=>{
          handleFilter({instock:e.target.value})
         }}>
 
     <option value="-1" selected={filterKeys.instock===-"1"?"selected":""}></option>
-    <option value="0" selected={filterKeys.instock==="0"?"selected":""}>No</option>
-    <option value="1" selected={filterKeys.instock==="1"?"selected":""}>Yes</option>
+    <option value="0" selected={filterKeys.instock==="0"?"selected":""}>outstock</option>
+    <option value="1" selected={filterKeys.instock==="1"?"selected":""}>instock</option>
     </select>
 
     </label>

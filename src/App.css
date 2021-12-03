@@ -60,6 +60,19 @@
   width:100%;
   box-sizing: border-box;
 }
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .login{
 
  
@@ -372,6 +385,7 @@ td, th{
 table{
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 3rem;
 }
 .btnClose{
   position: absolute;
@@ -726,7 +740,7 @@ h2,h3{
 }
 
 .printor td{
-  padding:0.3rem 0.7rem;
+  padding:0.1rem 0.7rem;
 }
 
 .printor  .reqNumber{

@@ -5,6 +5,7 @@ function Actions({item,handleUpdate,categories}) {
     // const [instock,setInstock] = useState(item.instock)
     // const [iswrap,setIswrap] = useState(item.iswrap)
     const [showBtns,setShowBtns] = useState(false)
+    const [days,setDays] = useState(item.days)
     // const [unstickTray,setUnstickTray] = useState(item.unstickTray)
 
     return <>
@@ -28,13 +29,20 @@ function Actions({item,handleUpdate,categories}) {
             </select>
             </div>
 
-            {/* <div>
-          <input type = "number" min="0" max="10" value={item.days} onChange={(e)=>{
-            if(e.target.value>=0){
-              handleUpdate(item.id,'days',e.target.value)
-            }
+
+            <div>
+                <label>days</label>
+          <input type = "number" min="0" max="10" value={days} 
+          onFocus={e=>e.target.select()}
+          onChange={(e)=>{
+              setDays(()=>e.target.value)
+           // if(e.target.value>=0){
+              handleUpdate(item.id,'days',parseInt(e.target.value))
+           // }
           }}/>
            </div>
+
+            {/* 
 
             <div>
           <label>unstick </label>

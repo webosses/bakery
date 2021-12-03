@@ -27,7 +27,7 @@ function App() {
   // if(!(isLoadingAuth&&isAuthenticated)){
   //   return <LoginButton/>
   // }
-  console.log(authenticated)
+  // console.log(authenticated)
 
   if(!authenticated) return <LoginForm login={login}/>
   if(isLoading) return <Loading/>
