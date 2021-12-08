@@ -12,7 +12,10 @@ import today,{tomorrow,yesterday,dayBefore} from "../util"
 function Editor() {
 
     const [copyCompleted,setCopyCompleted] = useState(true)
-    const {env,sortedProducts,filterKeys,getDailyProduct,dailyProducts,setProducts,hasTomorrowData,selectedDay,products} = useGlobalContext();
+    const [NewItemCreated, setNewItemCreated] = useState(1)
+    const [newProduct,setNewProduct] = useState(null)
+    const [oldProductsLength,setOldProductsLength]=useState(0)
+    const {env,sortedProducts,getDailyProduct,setProducts,hasTomorrowData,selectedDay,products} = useGlobalContext();
 
     const getOldDayProducts=(day)=>{
       const temp = getDailyProduct(dayBefore(day))
@@ -23,26 +26,36 @@ function Editor() {
       return getOldDayProducts(dayBefore(day))
   
     }
+
+    useEffect(()=>{
+
+      if(NewItemCreated===oldProductsLength){
+        setCopyCompleted(true)
+      }
+
+    },[NewItemCreated])
   // console.log('tomorrow',new Date(tomorrow))
     const copyProducts = (e)=>{
       e.preventDefault()
       setCopyCompleted(false)
-  
-      console.log(products)
+      //setNewItemCreated(3)
+      
+    // console.log(NewItemCreated)
+    //  console.log(products)
   
       let newData = [];//to merge into products list using setProducts
       const dateFor = sortedProducts.length>0?tomorrow:today;//update new data field "date"
-      const day = dateFor==tomorrow?today:yesterday
+      const day = dateFor==tomorrow?today:yesterday//data from day
       const oldData = getOldDayProducts(day);
          console.log(oldData);
   
       //for detect if all today's data copied to contentful
-      const oldDataLength = oldData.length;
-      if(oldDataLength==0)return;
+      if(oldData.length==0)return;
+     setOldProductsLength(oldData.length);
+     
   
-      let created = 0;
       oldData.forEach(pro=>{
-        setCopyCompleted(false)
+        setNewProduct(null)
         let fields = {}
         let newDataItem = {}
         for(let [key,value] of Object.entries(pro)){
@@ -58,17 +71,19 @@ function Editor() {
           
         }
         newData =[...newData,newDataItem]
-        console.log(newData)
-  
-        // console.log('fields',fields)
-          setTimeout(addDataToContentful(fields),1000)
-  created+=1;
-          if(created==oldDataLength){
-            setProducts(products=>{
-              return [...products,...newData]
+      //   console.log(newData)
+      //  console.log('fields',fields)
+      //  console.log([...products,...newData])
+      //  return;
+
+          setTimeout(()=>addDataToContentful(fields,newData),1500)
+          if(newProduct!==null){
+            setProducts(()=>{
+             return [...products,newProduct]
             })
-            setCopyCompleted(true)
           }
+        //  console.log(oldProductsLength,"created",NewItemCreated)
+         
         
         //env createEntry
       })
@@ -76,14 +91,15 @@ function Editor() {
   
     }
   
-    const addDataToContentful = (fields)=>{
-      let created = 0;
+    const addDataToContentful = (fields,newProduct)=>{
+      
       env.createEntry('bakeryProduct',{fields: fields})
     .then(product=>{
-      created +=1;
+      console.log('created contentful',NewItemCreated)
+      setNewItemCreated((num)=>num+1)
      return product.publish()
     }) 
-    .then(product=>console.log(product))
+    .then(product=>setNewProduct({...newProduct,id:product.sys.id}))
     .catch(console.error)
   
     }
@@ -101,18 +117,19 @@ function Editor() {
     // },[filterKeys])
   
     const deleteAll=()=>{
-      const old =getDailyProduct(today)
-      console.log(old,old.length)
+      const old =getDailyProduct(selectedDay)
+    //  console.log(old,old.length)
      
       old.forEach(p=>{
        const result= env.getEntry(p.id)
        .then(entry=>{
-       setTimeout(entry.unpublish(),1000);
+       setTimeout(()=>entry.unpublish(),1000);
        })
        .then(entry=>{
+         setProducts(()=>products.filter(pro=>pro.id!==p.id))
        console.log(entry,'unpublished')
        }).catch(console.error())
-       console.log(result)
+      // console.log(result)
        // console.log(p.id,p.title,p.date)
       })
     }
@@ -125,7 +142,7 @@ function Editor() {
 
     return <>
       {/* <span className="delete_btn" onClick={(e)=>{
-      deleteAll()
+      setTimeout(()=>deleteAll(),1000)
       }}>delete</span> */}
       <div className="editor">
       {hasProducts?<List products={sortedProducts}/>:<EmptyData/>}
