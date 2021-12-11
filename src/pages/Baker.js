@@ -22,7 +22,7 @@ function Baker() {
     
     <div className="baker">
 
-    {hasProducts?<List products={sortedProducts} />:<EmptyData/>}
+    {hasProducts?<List />:<EmptyData/>}
     </div>
 
       

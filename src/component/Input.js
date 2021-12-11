@@ -1,26 +1,46 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 
 function Input({handler,value}) {
+    //console.log(value)
     const [edited,setEdited] = useState(false)
      const [inputValue, setInputValue] = useState(value)
+
+
+     const handleNumber=(value)=>{
+         const number = parseInt(value)
+         if(isNaN(number)){
+           
+            return 0;
+        }
+
+        return number;
+
+
+
+     }
+    //  useEffect(()=>{
+    //      setInputValue(value)
+    //  },[])
     return (
-        <input className={`${edited?"input_edited":""}`} type="text" value={value}
+        <input className={`${edited?"input_edited":""}`} type="text" value={inputValue}
                onFocus={(e)=>{
                  e.target.select()
 
                }}
-               onChange = {(e)=>{
-                let value = parseInt(e.target.value)
-                if(isNaN(value)){
-                    e.target.value=0; 
-                    return;
-                }
-                if(inputValue!==value){
-                    e.target.value =  value;
-                     setInputValue(value)
-                    handler(value)
+               onBlur={e=>{
+                  
+                   if(inputValue!==value){
+                    handler(inputValue)
                     setEdited(true)
-                }
+
+                   }
+
+               }}
+               onChange = {(e)=>{
+                
+
+                     setInputValue(()=>handleNumber(e.target.value))
+                   
                 
 
                }}

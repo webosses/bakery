@@ -434,6 +434,7 @@ useEffect(()=>{
 },[selectedDay])//products
 
 useEffect(()=>{
+  console.log('products updated')
   // console.log(sortKey,'product updating',products)
     setHasTomorrowData(getDailyProduct(tomorrow).length>0)
     setDailyProducts(()=>{

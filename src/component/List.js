@@ -3,13 +3,13 @@ import Item from "./Item";
 import { useGlobalContext } from '../context';
 
 
-function List({products}){
+function List(){
 
 
-    const {sortKey} = useGlobalContext();
+    const {sortKey,sortedProducts:products} = useGlobalContext();
     let printHeader=false;
     let category = ""
-    // console.log(sortKey)
+   //  console.log("list",products)
    
 //    let category="";
     return <>

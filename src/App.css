@@ -72,6 +72,27 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+main{
+  position: relative;
+}
+.notice{
+  display: flex;
+  flex-wrap: wrap;
+  /* background:red; */
+  width:100%;
+justify-content: center;  
+position: absolute;
+align-items: center;
+  top:0px;
+  z-index: 1;
+  padding:1rem;
+}
+.notice div{
+  flex: 1 1 100%;
+}
+.progressing{
+  background: var(--activeCl);
+}
 
 .login{
 

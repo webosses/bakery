@@ -32,29 +32,11 @@ export default function Item({item,printHeader}){
       <tr className={`item ${item.instock?"instock":'outstock'}`}>
           <td className="item_name">
 
+         
 
-
-          {viewor==="editor"&&selectedDay===tomorrow&&<input className={`${edited?"input_edited":""}`} type="number" value={inputValue}
-               onFocus={(e)=>{
-                 e.target.select()
-
-               }}
-               onChange = {(e)=>{
-                let value = parseInt(e.target.value)
-                if(isNaN(value)){
-                    e.target.value=inputValue; 
-                    return;
-                }
-                if(inputValue!==value){
-                    e.target.value =  value;
-                     setInputValue(value)
-                    handleUpdate(item.id,"required",value)
-                    setEdited(true)
-                }
-                
-
-               }}
-            />}
+          {viewor==="editor"&&selectedDay===tomorrow&&<Input handler={setRequiredNumber} value={item.required}/>}
+         
+            
        
       
             {(viewor=="baker"||selectedDay==today)&&<span className={`reqNumber ${selectedDay==today?"flip":""}`} >{item.required}</span>} 
