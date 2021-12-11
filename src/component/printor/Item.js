@@ -3,7 +3,7 @@ import React from 'react';
 
 //actions {hasAction bool, markup func }
 export default function Item({item,printHeader}){
-  const withNumber = false;
+  const withNumber = true;
   
  // const {viewor} =  useGlobalContext();
  function getOffsetDate(date,days){
