@@ -9,7 +9,7 @@ function CopyButton({title}) {
     const [copyCompleted,setCopyCompleted] = useState(true)
     const [NewItemCreated, setNewItemCreated] = useState(1)
     const [oldProductsLength,setOldProductsLength]=useState(0)
-    const {env,sortedProducts,getDailyProduct,setProducts,selectedDay,products} = useGlobalContext();
+    const {env,sortedProducts,getDailyProduct,setProducts,selectedDay} = useGlobalContext();
 
     const getOldDayProducts=(day)=>{
       const temp = getDailyProduct(dayBefore(day))
@@ -22,7 +22,7 @@ function CopyButton({title}) {
     }
 
     useEffect(()=>{
-        console.log(sortedProducts)
+      //  console.log(sortedProducts)
 
       if(NewItemCreated===oldProductsLength){
         setCopyCompleted(true)

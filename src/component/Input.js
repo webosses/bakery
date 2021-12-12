@@ -22,7 +22,7 @@ function Input({handler,value}) {
     //      setInputValue(value)
     //  },[])
     return (
-        <input className={`${edited?"input_edited":""}`} type="text" value={inputValue}
+        <input className={`${edited?"input_edited":""}`} type="number" value={inputValue}
                onFocus={(e)=>{
                  e.target.select()
 

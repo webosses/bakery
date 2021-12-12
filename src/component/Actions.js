@@ -21,10 +21,12 @@ function Actions({item,handleUpdate,categories}) {
 
               <div>
                 
-                <select onChange={(e)=>handleUpdate(item.id,'category',e.target.value)}>
+                <select
+                defaultValue={item.category}
+                 onChange={(e)=>handleUpdate(item.id,'category',e.target.value)}>
               <option></option>
               {categories.map((c,index)=>{
-                return <option key={index} value={c} selected={c===item.category?'selected':''}>{c}</option>
+                return <option key={index} value={c}>{c}</option>
               })}
             </select>
             </div>

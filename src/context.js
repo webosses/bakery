@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import * as contentful from "contentful"
 import * as contentfulManager from "contentful-management"
-import today,{tomorrow,yesterday,dayBefore} from "./util"
+import today,{tomorrow,yesterday} from "./util"
 
 const AppContext = React.createContext()
 
@@ -103,9 +103,6 @@ const hasAccessToken = ()=>{
 
 
 useEffect(()=>{
-  console.log(
-    'effect token'
-  )
   hasAccessToken()
 },[])
 
@@ -129,7 +126,7 @@ useEffect(()=>{
 
   
 const getBakerProducts = ()=>{
-  console.log(sortKey,'sortkey')
+  //console.log(sortKey,'sortkey')
   return dailyProducts.filter(p=>p.required>0);
  //return sortProducts(getDailyProduct(selectedDay).filter(p=>p.required>0))
 }
@@ -146,7 +143,7 @@ const getBakerProducts = ()=>{
 
  const handleUpdate = (id,field,value)=>{
   env.getEntry(id).then(product=>{
-    console.log(value)
+  //  console.log(value)
    
       product.fields[field]['en-US'] = value;
 
@@ -167,8 +164,8 @@ const getBakerProducts = ()=>{
  }
 
   const handleFilter = (keys)=>{
-    setFilterKeys(()=>{
-      return {...filterKeys,...keys}
+    setFilterKeys((old)=>{
+      return {...old,...keys}
     });
    
 }
@@ -179,16 +176,17 @@ const filterProducts = ()=>{
   const origin = viewor==="editor"?dailyProducts:getBakerProducts()
 	
 		const {category,isdone,instock,iswrap,name} = filterKeys;
+    //console.log(filterKeys,'keys')
 
 		let tempProducts = [...origin];
  //  console.log('before filter',tempProducts)
   // const ptn = new RegExp('cookie')
 
    if(name.length>0){
-     console.log(`.*${name}.*`,'pattern')
+   //  console.log(`.*${name}.*`,'pattern')
        const pattern = new RegExp(`.*${name}.*`,'i')
-       console.log('name',name)
-       console.log(tempProducts,'before name filter')
+      // console.log('name',name)
+     //  console.log(tempProducts,'before name filter')
 
     tempProducts = tempProducts.filter(product => {
     //  console.log(pattern.test(product.title),'test',product.title)
@@ -209,11 +207,13 @@ return  pattern.test(product.title)
   }
 
 		if(category.length!==0){
+     // console.log(tempProducts,"before filter categort")
        
 			tempProducts = tempProducts.filter(product => {
-        // console.log('filter category',category,product.category)
+       //  console.log('filter category',category,product.category)
          for(var i=0; i<category.length; i++){
-                 return category[i]===product.category
+          //  console.log(category[i]==product.category,category[i],product.category)
+                 if(category[i]==product.category)return true;
                 
          }
        return false;
@@ -221,7 +221,7 @@ return  pattern.test(product.title)
       }
       );
 
-      // console.log('after filter category',tempProducts);
+     // console.log('after filter category',tempProducts);
 
 			
 		}
@@ -434,7 +434,7 @@ useEffect(()=>{
 },[selectedDay])//products
 
 useEffect(()=>{
-  console.log('products updated')
+ // console.log('products updated')
   // console.log(sortKey,'product updating',products)
     setHasTomorrowData(getDailyProduct(tomorrow).length>0)
     setDailyProducts(()=>{

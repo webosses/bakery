@@ -14,12 +14,13 @@ export default function Filter({showFilters}){
             return;
         }
           if(event.target.checked){
-              setSelectedCa(()=>{
-                  return [...selectedCa,event.target.value];
+              //console.log('checked', event.target.value)
+              setSelectedCa((old)=>{
+                  return [...old,event.target.value];
               })
           }else{
-              setSelectedCa(()=>{
-                  return selectedCa.filter(c=>c!=event.target.value)
+              setSelectedCa((old)=>{
+                  return old.filter(c=>c!=event.target.value)
               })
           }
 
@@ -47,6 +48,8 @@ export default function Filter({showFilters}){
     }
 
     useEffect(()=>{
+       // console.log('category changed',filterKeys,selectedCa)
+        
         handleFilter({category:selectedCa})
     },[selectedCa])
 
@@ -86,6 +89,7 @@ export default function Filter({showFilters}){
         checked={isChecked(category)} 
         value={category} name="category"  
          onChange={(e)=>{
+            // console.log('is checked',e.target.checked)
             handleCheckboxes(e)
 //console.log('target',e.target.checked,e.target.value)
            // handleFilter({category:[e.target.checked]})
@@ -99,26 +103,28 @@ export default function Filter({showFilters}){
 <div className="filter_row">
     <label>
         <span>stock</span>
-        <select onChange={(e)=>{
+        <select 
+        defaultValue={filterKeys.instock}
+        onChange={(e)=>{
          handleFilter({instock:e.target.value})
         }}>
 
-    <option value="-1" selected={filterKeys.instock===-"1"?"selected":""}></option>
-    <option value="0" selected={filterKeys.instock==="0"?"selected":""}>outstock</option>
-    <option value="1" selected={filterKeys.instock==="1"?"selected":""}>instock</option>
+    <option value="-1"></option>
+    <option value="0">outstock</option>
+    <option value="1">instock</option>
     </select>
 
     </label>
    
     <label>
         <span>wrap-up</span>
-        <select onChange={(e)=>{
+        <select defaultValue={filterKeys.iswrap} onChange={(e)=>{
          handleFilter({iswrap:e.target.value})
         }}>
 
-    <option value="-1" selected={filterKeys.iswrap==="-1"?"selected":""}></option>
-    <option value="0" selected={filterKeys.iswrap==="0"?"selected":""}>No</option>
-    <option value="1" selected={filterKeys.iswrap==="1"?"selected":""}>Yes</option>
+    <option value="-1"></option>
+    <option value="0">No</option>
+    <option value="1">Yes</option>
     </select>
 
     </label>
@@ -130,13 +136,14 @@ export default function Filter({showFilters}){
   
 
    <select 
+   defaultValue={filterKeys.isdone}
    onChange={(e)=>{
     handleFilter({isdone:e.target.value})
    }}>
 
-<option value="-1" selected={filterKeys.isdone==="-1"?"selected":""}></option>
-<option value="0" selected={filterKeys.isdone==="0"?"selected":""}>No</option>
-<option value="1" selected={filterKeys.isdone==="1"?"selected":""}>Yes</option>
+<option value="-1"></option>
+<option value="0">No</option>
+<option value="1">Yes</option>
 </select> </label>
 
 

@@ -4,12 +4,12 @@ export default function SortForm({setSortKey,sortKey}){
     return<>
     <div className="sort_box">
     <label>Sort</label>
-    <select  onChange={(e)=>{
+    <select defaultValue={sortKey}  onChange={(e)=>{
         setSortKey(e.target.value)
     }}>
-    <option value="index" selected={sortKey==='index'?'selected':''}>Index</option>
-    <option value="category" selected={sortKey==='category'?'selected':''}>Category</option>
-    <option value="title" selected={sortKey==='title'?'selected':''}>Name</option>
+    <option value="index">Index</option>
+    <option value="category">Category</option>
+    <option value="title">Name</option>
     </select>
     </div>
     </>
