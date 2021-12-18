@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import SortForm from './Sort';
 import Filter from './Filter';
 import { useGlobalContext } from '../context';
+import Tasks from './Tasks';
 
 
 
@@ -10,6 +11,7 @@ function Header({children}) {
    const [showFilters,setShowFilters] = useState(false) 
    return (
         <div className="header">
+            {/* <Tasks /> */}
                         <div className="brand">ExpT Bakery</div>
                         <span className="btn_logout" onClick={logout}>logout</span>
 

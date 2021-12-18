@@ -146,7 +146,7 @@ function Editor() {
       setTimeout(()=>deleteAll(),1000)
       }}>delete</span> */}
       <div className="editor">
-      {/* {hasProducts&&<DeleteButton/>} */}
+      {hasProducts&&<DeleteButton/>}
       {hasProducts?<List />:<EmptyData/>}
       
       

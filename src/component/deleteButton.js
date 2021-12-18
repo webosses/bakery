@@ -34,9 +34,9 @@ function DeleteButton() {
       })
     }
     return (
-        <div>
+        <div className="delete_btn">
             {!completed&&<div className="notice progressing del_note"><h2>Deleting...({deleted})</h2></div>}
-            <button disabled={!completed} className="delete_btn" onClick={(e)=>{
+            <button disabled={!completed} className="btn" onClick={(e)=>{
       setTimeout(()=>deleteAll(),1000)
       }}>delete</button>
         </div>
